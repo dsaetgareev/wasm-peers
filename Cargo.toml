@@ -1,0 +1,2 @@
+[workspace]
+members = ["protocol", "signaling-server", "library", "xtask"]

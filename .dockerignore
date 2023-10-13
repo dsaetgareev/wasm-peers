@@ -1,0 +1,8 @@
+.github
+.idea
+.vs
+.vscode
+
+pkg
+dist
+target
