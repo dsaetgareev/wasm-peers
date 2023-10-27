@@ -151,28 +151,29 @@ async fn user_disconnected(user_id: UserId, connections: &Connections, sessions:
             session.host = None;
         } else if session.users.contains(&user_id) {
             session.users.remove(&user_id);
+            match session.host {
+                Some(host) => {
+                    if host != user_id {
+                        let disconnected = SignalMessage::Disconnected(user_id);
+                        let disconnected = rmp_serde::to_vec(&disconnected).unwrap();
+                        connections.read().await
+                            .get(&host)
+                            .expect("cannot get UnboundedSender")
+                            .send(Message::Binary(disconnected.clone()))
+                            .expect("cannot send message");
+                    }
+                    
+                },
+                None => {
+                    
+                },
+            }
         }
         if session.host.is_none() && session.users.is_empty() {
             session_to_delete = Some(*session_id);
             break;
         }
-        // match session.host {
-        //     Some(host) => {
-        //         if host != user_id {
-        //             let disconnected = SignalMessage::Disconnected(user_id);
-        //             let disconnected = rmp_serde::to_vec(&disconnected).unwrap();
-        //             connections.read().await
-        //                 .get(&host)
-        //                 .expect("cannot get UnboundedSender")
-        //                 .send(Message::Binary(disconnected.clone()))
-        //                 .expect("cannot send message");
-        //         }
-                
-        //     },
-        //     None => {
-                
-        //     },
-        // }
+        
     }
     // remove session if it's empty
     if let Some(session_id) = session_to_delete {
