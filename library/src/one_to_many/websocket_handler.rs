@@ -130,12 +130,14 @@ pub async fn handle_websocket_message<T: DeserializeOwned>(
         }
         SignalMessage::Disconnected(user_id) => {
             debug!("dixconet hendle ws {}", user_id);
-            network_manager
-                .inner
-                .borrow_mut()
-                .connections
-                .remove(&user_id)
-                .expect("cannot remove user_id");
+            if network_manager.inner.borrow().connections.contains_key(&user_id) {
+                 network_manager
+                    .inner
+                    .borrow_mut()
+                    .connections
+                    .remove(&user_id)
+                    .expect("cannot remove user_id");
+            }           
             on_disconnect_callback(user_id);
         }
     }

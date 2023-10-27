@@ -339,7 +339,7 @@ impl MiniServer {
 
 /// Abstraction over `WebRTC` peer-to-peer connection.
 /// Same as [`MiniServer`], but representing clients in client-server topology.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct MiniClient {
     inner: NetworkManager,
 }

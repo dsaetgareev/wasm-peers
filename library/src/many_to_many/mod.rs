@@ -87,7 +87,7 @@ use crate::ConnectionType;
 /// to allow possibility of referring to network manger itself from the callbacks.
 ///
 /// This class is a  pointer to the underlying resource and can be cloned freely.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct NetworkManager {
     inner: OneToManyNetworkManager,
 }
